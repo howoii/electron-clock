@@ -19,22 +19,30 @@ window.electronAPI.handleActive((e) => {
     timeNode.innerText = t.toLocaleTimeString()
 })
 
+var isOFFWork = false
 const counterNode = document.getElementById('counter')
-counterNode.innerText = getCountDown()
-function getCountDown() {
+updateCountDown(false)
+function updateCountDown(notify) {
     const now = new Date()
     const count = 9 * 3600 * 1000 - (now - t)
     if (count < 0) {
-        return '下班啦!'
+        counterNode.innerText = '下班啦!'
+        if (notify && !isOFFWork) {
+            new Notification('下班!', {
+                body: '下班啦！搞快点！'
+            })
+        }
+        isOFFWork = true
+        return
     }
 
     const h = Math.floor(count / (1000 * 3600)) % 24
     const m = Math.floor(count / (1000 * 60)) % 60
     const s = Math.floor(count / 1000) % 60
-    return `${h}小时${m}分${s}秒`
+    counterNode.innerText = `${h}小时${m}分${s}秒`
 }
 setInterval(() => {
-    counterNode.innerText = getCountDown()
+    updateCountDown(true)
 }, 1000);
 
-// todo: 通知、UI美化
+// todo: UI美化
