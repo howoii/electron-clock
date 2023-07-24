@@ -6,13 +6,19 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <link rel="stylesheet" href="style.css">
     <title>上班时钟</title>
 </head>
 
 <body>
-    <h1>⏰</h1>
-    <p id="time"></p>
-    <p id="counter"></p>
+    <header>
+        <h1>时钟</h1>
+    </header>
+    <main>
+        <p>👨🏻‍💻 <span id="start"></span></p>
+        <p>⏱ <span id="time"></span></p>
+        <p>⏰ <span id="counter"></span></p>
+    </main>
 </body>
 <script src="./renderer.js"></script>
 

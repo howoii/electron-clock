@@ -1,6 +1,6 @@
 const t = updateTime()
-const timeNode = document.getElementById('time')
-timeNode.innerText = t.toLocaleTimeString()
+const startNode = document.getElementById('start')
+startNode.innerText = t.toLocaleTimeString()
 
 function updateTime() {
     const dateStr = window.localStorage.getItem('last_time')
@@ -16,11 +16,12 @@ function updateTime() {
 
 window.electronAPI.handleActive((e) => {
     t = updateTime()
-    timeNode.innerText = t.toLocaleTimeString()
+    startNode.innerText = t.toLocaleTimeString()
 })
 
 var isOFFWork = false
 const counterNode = document.getElementById('counter')
+const timeNode = document.getElementById('time')
 updateCountDown(false)
 function updateCountDown(notify) {
     const now = new Date()
@@ -40,6 +41,7 @@ function updateCountDown(notify) {
     const m = Math.floor(count / (1000 * 60)) % 60
     const s = Math.floor(count / 1000) % 60
     counterNode.innerText = `${h}小时${m}分${s}秒`
+    timeNode.innerText = now.toLocaleTimeString()
 }
 setInterval(() => {
     updateCountDown(true)
