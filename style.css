@@ -1,4 +1,58 @@
+html {
+    font-size: 10px;
+}
+
 h1 {
-    font-size: 24px;
+    font-size: 2em;
     text-align: center;
+}
+
+a {
+    text-decoration: none;
+}
+
+main p {
+    font-size: 1.5em;
+    padding-left: .5;
+    margin-block: .5em;
+    font-weight: bold;
+}
+
+main span {
+    margin-left: .5em;
+}
+
+aside {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    margin: 0;
+    padding: 0;
+}
+
+aside a {
+    display: block;
+    font-size: 2em;
+    line-height: 1;
+    text-align: center;
+    font-weight: bold;
+    text-shadow: 2px gray;
+    border: 3px solid green;
+    background-color: black;
+    color: antiquewhite;
+    height: 1em;
+    width: 1em;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+aside a:hover,
+aside a:focus,
+aside a:active {
+    background-color: antiquewhite;
+    color: black;
+}
+
+aside a:active {
+    background-color: grey;
 }

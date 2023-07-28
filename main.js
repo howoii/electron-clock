@@ -3,8 +3,8 @@ const path = require('path')
 
 const createWindow = () => {
     const win = new BrowserWindow({
-        width: 240,
-        height: 240,
+        width: 200,
+        height: 200,
         resizable: false,
         maximizable: false,
         webPreferences: {
@@ -25,7 +25,6 @@ app.whenReady().then(() => {
     app.on('did-become-active', () => {
         const win = BrowserWindow.getFocusedWindow()
         if (win) {
-            const time = new Date()
             win.webContents.send('active')
         }
     })

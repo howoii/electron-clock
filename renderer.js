@@ -1,5 +1,8 @@
-const t = updateTime()
-const startNode = document.getElementById('start')
+const DURATION_MAX = 9
+var duration = 9
+
+var t = updateTime()
+var startNode = document.getElementById('start')
 startNode.innerText = t.toLocaleTimeString()
 
 function updateTime() {
@@ -20,12 +23,12 @@ window.electronAPI.handleActive((e) => {
 })
 
 var isOFFWork = false
-const counterNode = document.getElementById('counter')
-const timeNode = document.getElementById('time')
+var counterNode = document.getElementById('counter')
+var timeNode = document.getElementById('time')
 updateCountDown(false)
 function updateCountDown(notify) {
     const now = new Date()
-    const count = 9 * 3600 * 1000 - (now - t)
+    const count = duration * 3600 * 1000 - (now - t)
     if (count < 0) {
         counterNode.innerText = '下班啦!'
         if (notify && !isOFFWork) {
@@ -35,16 +38,25 @@ function updateCountDown(notify) {
         }
         isOFFWork = true
         return
+    } else {
+        isOFFWork = false
     }
 
     const h = Math.floor(count / (1000 * 3600)) % 24
     const m = Math.floor(count / (1000 * 60)) % 60
     const s = Math.floor(count / 1000) % 60
-    counterNode.innerText = `${h}小时${m}分${s}秒`
+    counterNode.innerText = `${h}h ${m}m ${s}s`
     timeNode.innerText = now.toLocaleTimeString()
 }
 setInterval(() => {
     updateCountDown(true)
 }, 1000);
 
-// todo: UI美化
+var durationNode = document.getElementById('duration')
+durationNode.innerText = `${duration}`
+durationNode.addEventListener('click', () => {
+    console.log('click')
+    duration = duration + 1
+    duration = (duration > DURATION_MAX) ? 1 : duration
+    durationNode.innerText = `${duration}`
+})
