@@ -1,34 +1,44 @@
 const DURATION_MAX = 9
-var duration = 9
+const VERSION_DAYS = [new Date('2023/8/10'), new Date('2023/10/31'), new Date('2023/1/24')]
 
-var t = updateTime()
-var startNode = document.getElementById('start')
-startNode.innerText = t.toLocaleTimeString()
+var duration = 9
+var startTime = new Date()
+var isOFFWork = true
+var isVersionUpdateDay = false
+const startNode = document.getElementById('start')
+const counterNode = document.getElementById('counter')
+const timeNode = document.getElementById('time')
+const durationNode = document.getElementById('duration')
+durationNode.innerText = `${duration}`
 
 function updateTime() {
     const dateStr = window.localStorage.getItem('last_time')
     const last = new Date(dateStr)
     const now = new Date()
+    isVersionUpdateDay = VERSION_DAYS.some((d) => {
+        return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() && d.getDate() === now.getDate()
+    })
     if (!dateStr || last.toLocaleDateString() !== now.toLocaleDateString()) {
         window.localStorage.setItem('last_time', now.toString())
-        return now
+        startTime = now
     } else {
-        return last
+        startTime = last
     }
+    startNode.innerText = startTime.toLocaleTimeString()
 }
 
-window.electronAPI.handleActive((e) => {
-    t = updateTime()
-    startNode.innerText = t.toLocaleTimeString()
-})
-
-var isOFFWork = false
-var counterNode = document.getElementById('counter')
-var timeNode = document.getElementById('time')
-updateCountDown(false)
 function updateCountDown(notify) {
     const now = new Date()
-    const count = duration * 3600 * 1000 - (now - t)
+    timeNode.innerText = now.toLocaleTimeString()
+    if (isVersionUpdateDay) {
+        counterNode.innerText = `版更日`
+        counterNode.setAttribute('class', 'alarm')
+        return
+    } else {
+        counterNode.removeAttribute('class', 'alarm')
+    }
+
+    const count = duration * 3600 * 1000 - (now - startTime)
     if (count < 0) {
         counterNode.innerText = '下班啦!'
         if (notify && !isOFFWork) {
@@ -46,14 +56,22 @@ function updateCountDown(notify) {
     const m = Math.floor(count / (1000 * 60)) % 60
     const s = Math.floor(count / 1000) % 60
     counterNode.innerText = `${h}h ${m}m ${s}s`
-    timeNode.innerText = now.toLocaleTimeString()
 }
+
+// update time on first time start app
+updateTime()
+updateCountDown(false)
+
+// update time when window is focused
+window.electronAPI.handleActive((e) => {
+    updateTime()
+})
+
+// update count down every second
 setInterval(() => {
     updateCountDown(true)
 }, 1000);
 
-var durationNode = document.getElementById('duration')
-durationNode.innerText = `${duration}`
 durationNode.addEventListener('click', () => {
     console.log('click')
     duration = duration + 1

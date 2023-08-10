@@ -56,3 +56,7 @@ aside a:active {
 aside a:active {
     background-color: grey;
 }
+
+.alarm {
+    color: red;
+}
